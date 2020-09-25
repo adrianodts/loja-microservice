@@ -1,6 +1,6 @@
 # loja-microservice
 
-Serviço que interage com o serviço de fornecedor via registro no eureka server.
+Serviço de compras que interage com o serviço de fornecedor via registro no eureka server.
 
 
 Exemplo de chamada:
