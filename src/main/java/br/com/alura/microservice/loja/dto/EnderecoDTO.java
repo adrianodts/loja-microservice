@@ -1,4 +1,4 @@
-package br.com.alura.microservice.loja.controller.dto;
+package br.com.alura.microservice.loja.dto;
 
 public class EnderecoDTO {
 
@@ -23,5 +23,10 @@ public class EnderecoDTO {
 	}
 	public void setRua(String rua) {
 		this.rua = rua;
+	}
+	
+	@Override
+	public String toString() {
+		return "EnderecoDTO [rua=" + rua + ", numero=" + numero + ", Estado=" + Estado + "]";
 	}
 }

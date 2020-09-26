@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.alura.microservice.loja.controller.dto.CompraDTO;
+import br.com.alura.microservice.loja.dto.CompraDTO;
+import br.com.alura.microservice.loja.entity.Compra;
 import br.com.alura.microservice.loja.service.CompraService;
 
 @RestController
@@ -19,11 +20,13 @@ public class CompraController {
 	private CompraService compraService;
 	
 	@PostMapping
-	public ResponseEntity<?> realizaCompra(@RequestBody CompraDTO compraDTO) {
-		String msg = "Sucesso";
+	public ResponseEntity<Compra> realizaCompra(@RequestBody CompraDTO compraDTO) {
+		//Utiliza RestTemplate
+		//compraService.reailzaCompra(compraDTO);
 		
-		compraService.reailzaCompra(compraDTO);
+		//Utilliza FeignClient
+		Compra compra = compraService.realizarCompraFeign(compraDTO);
 		
-		return new ResponseEntity<String>( msg, HttpStatus.OK);
+		return new ResponseEntity<Compra>( compra, HttpStatus.OK);
 	}
 }

@@ -7,8 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import br.com.alura.microservice.loja.controller.dto.CompraDTO;
-import br.com.alura.microservice.loja.controller.dto.InfoFornecedorDTO;
+import com.netflix.discovery.converters.Auto;
+
+import br.com.alura.microservice.loja.client.FornecedorClient;
+import br.com.alura.microservice.loja.dto.CompraDTO;
+import br.com.alura.microservice.loja.dto.InfoFornecedorDTO;
+import br.com.alura.microservice.loja.dto.InfoPedidoDTO;
+import br.com.alura.microservice.loja.entity.Compra;
 
 @Service
 public class CompraService {
@@ -16,6 +21,9 @@ public class CompraService {
 	@Autowired
 	private RestTemplate client;
 
+	@Autowired
+	private FornecedorClient clientFeign;
+	
 	@Autowired
 	private DiscoveryClient eurekaClient;
 	
@@ -32,4 +40,24 @@ public class CompraService {
 		
 		System.out.println(exchange.getBody().getEndereco());
 	}
+	
+	public Compra realizarCompraFeign(CompraDTO dto) {
+		
+		InfoFornecedorDTO info = clientFeign.getInfoPorEstado(dto.getEndereco().getEstado());
+		System.out.println(info.getEndereco());
+		
+		InfoPedidoDTO pedido = clientFeign.realizaPedido(dto.getItem());
+		
+		eurekaClient.getInstances("fornecedor").stream().forEach(fornecedor -> {
+			System.out.println("Instance: " + fornecedor.getHost() + " "  +fornecedor.getPort());
+		});
+		
+		Compra compra = new Compra();
+		compra.setPedidoId(pedido.getId());
+		compra.setTempoDePreparo(pedido.getTempoDePreparo());
+		compra.setEnderecoDestino(dto.getEndereco().toString());
+		
+		return compra;
+	}
+	
 }
