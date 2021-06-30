@@ -23,8 +23,8 @@ curl -X POST \
 		}
 	],
 	"endereco" : {
-		"rua" : "Nelson Fuchs",
-		"numero": "282 - Casa 1",
+		"rua" : "TESTE",
+		"numero": "123",
 		"estado" : "SP"
 	}
 }'
